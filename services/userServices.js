@@ -1,0 +1,65 @@
+import bcrypt from "bcrypt";
+
+import { User } from "../models/userModel.js";
+import HttpError from "../helpers/HttpError.js";
+import { generateTokens } from "./jwtServices.js";
+
+export const registerDataService = async (
+  email,
+  name,
+  phone,
+  password,
+  admin,
+  pm
+) => {
+  if ((await User.findOne({ email })) !== null) {
+    throw HttpError(409, "Email in use");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = await User.create({
+    email,
+    name,
+    phone,
+    password: hashedPassword,
+    admin,
+    pm,
+  });
+  return await generateTokens(newUser);
+};
+
+export const loginDataService = async (email, password) => {
+  const foundUser = await User.findOne({ email });
+  if (!foundUser) throw HttpError(401, "Email or password is wrong");
+
+  const isPasswordMatching = await bcrypt.compare(password, foundUser.password);
+  if (!isPasswordMatching) throw HttpError(401, "Email or password is wrong");
+
+  return await generateTokens(foundUser);
+};
+
+export const logoutUserDataService = async (currentUser) => {
+  await User.findByIdAndUpdate(
+    { _id: currentUser._id },
+    { token: null, refreshToken: null }
+  );
+};
+
+export const updateUserUserDataService = async (currentUser, params) => {
+  if (!currentUser) throw HttpError(401, "User not found");
+  try {
+    return await User.findByIdAndUpdate(currentUser._id, params, { new: true });
+  } catch (error) {
+    throw HttpError(501, error);
+  }
+};
+
+export const regenerateTokenDataService = async (currentUser) => {
+  if (!currentUser) throw HttpError(401, "User is not found");
+  return await generateTokens(currentUser);
+};
+
+export const safeUserCloneDataService = (user) => {
+  const { _id, token, refreshToken, password, ...cloneUser } = user.toObject();
+  return cloneUser;
+};
