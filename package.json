@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./app.js",
+    "build": "npm install",
     "dev": "nodemon ./app.js"
   },
   "author": "",
