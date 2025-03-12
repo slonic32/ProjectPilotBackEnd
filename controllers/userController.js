@@ -19,7 +19,7 @@ export const register = async (req, res) => {
   );
 
   res.status(200).json({
-    user: { name, email, phone, admin, pm },
+    user: safeUserCloneDataService(newUser),
     token: newUser.token,
     refreshtoken: newUser.refreshtoken,
   });
@@ -30,7 +30,7 @@ export const login = async (req, res) => {
   const user = await loginDataService(email, password);
 
   res.status(200).json({
-    user: { name: user.name, email: user.email, phone: user.phone },
+    user: safeUserCloneDataService(user),
     token: user.token,
     refreshtoken: user.refreshtoken,
   });
@@ -42,7 +42,7 @@ export const logout = async (req, res) => {
 };
 
 export const current = async (req, res) => {
-  res.status(200).json(safeUserCloneDataService(req.user));
+  res.status(200).json({ user: safeUserCloneDataService(req.user) });
 };
 
 export const updateUser = async (req, res, next) => {
