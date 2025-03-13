@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { User } from "../models/userModel.js";
 import HttpError from "../helpers/HttpError.js";
 import { generateTokens } from "./jwtServices.js";
+import { isValidObjectId } from "mongoose";
 
 export const addDataService = async (
   email,
@@ -25,7 +26,7 @@ export const addDataService = async (
     admin,
     pm,
   });
-  return await generateTokens(newUser);
+  return newUser;
 };
 
 export const loginDataService = async (email, password) => {
@@ -60,6 +61,35 @@ export const regenerateTokenDataService = async (currentUser) => {
 };
 
 export const safeUserCloneDataService = (user) => {
-  const { _id, token, refreshToken, password, ...cloneUser } = user.toObject();
+  const { token, refreshToken, password, ...cloneUser } = user.toObject();
   return cloneUser;
+};
+
+export const allUserDataService = async () => {
+  const users = await User.find();
+  return users;
+};
+
+export const deleteUserDataService = async (id, currentUser) => {
+  try {
+    const isValid = isValidObjectId(id);
+
+    if (!isValid) {
+      throw HttpError(404, "User not found");
+    }
+
+    if (id === currentUser._id) {
+      throw HttpError(409, "Can't delete current user!");
+    }
+
+    const deletedData = await User.findByIdAndDelete(id);
+
+    if (!deletedData) {
+      throw HttpError(404, "User not found");
+    }
+
+    return deletedData;
+  } catch (error) {
+    throw error;
+  }
 };

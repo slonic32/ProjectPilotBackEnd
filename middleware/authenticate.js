@@ -38,3 +38,18 @@ export const authenticateRefresh = async (req, res, next) => {
     next(error);
   }
 };
+
+export const isAdmin = async (req, res, next) => {
+  try {
+    const currentUser = req.user;
+
+    if (currentUser.admin) {
+      next();
+    } else
+      res.status(401).json({
+        message: "Unauthorized",
+      });
+  } catch (error) {
+    next(error);
+  }
+};

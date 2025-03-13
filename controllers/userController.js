@@ -5,6 +5,8 @@ import {
   addDataService,
   safeUserCloneDataService,
   updateUserUserDataService,
+  allUserDataService,
+  deleteUserDataService,
 } from "../services/userServices.js";
 
 export const add = async (req, res) => {
@@ -13,8 +15,6 @@ export const add = async (req, res) => {
 
   res.status(200).json({
     user: safeUserCloneDataService(newUser),
-    token: newUser.token,
-    refreshtoken: newUser.refreshtoken,
   });
 };
 
@@ -49,4 +49,20 @@ export const updateUser = async (req, res, next) => {
 export const refreshTokens = async (req, res) => {
   const { token, refreshtoken } = await regenerateTokenDataService(req.user);
   res.status(200).json({ token, refreshtoken });
+};
+
+export const all = async (req, res) => {
+  const users = await allUserDataService();
+  res
+    .status(200)
+    .json({ users: users.map((user) => safeUserCloneDataService(user)) });
+};
+
+export const deleteUser = async (req, res) => {
+  const deletedData = await deleteUserDataService(req.params.id, req.user);
+
+  res.status(200).json({
+    user: safeUserCloneDataService(deletedData),
+    message: "User was deleted",
+  });
 };
