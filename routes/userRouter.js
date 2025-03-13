@@ -10,11 +10,7 @@ import * as controllers from "../controllers/userController.js";
 
 const userRouter = express.Router();
 userRouter
-  .post(
-    "/add",
-    validateBody(Schemas.registerSchema),
-    errorHandling(controllers.add)
-  )
+  .post("/add", validateBody(Schemas.addSchema), errorHandling(controllers.add))
   .post(
     "/login",
     validateBody(Schemas.loginSchema),
@@ -34,10 +30,10 @@ export default userRouter;
 
 /**
  * @swagger
- * /api//register:
+ * /api//add:
  *   post:
- *     summary: Registering a user
- *     description: Private route to register a user
+ *     summary: Adding a user
+ *     description: Private route to add new user
  *     tags: ["User API"]
  *     requestBody:
  *       required: true
