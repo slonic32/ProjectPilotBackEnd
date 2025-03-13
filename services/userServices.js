@@ -4,7 +4,7 @@ import { User } from "../models/userModel.js";
 import HttpError from "../helpers/HttpError.js";
 import { generateTokens } from "./jwtServices.js";
 
-export const registerDataService = async (
+export const addDataService = async (
   email,
   name,
   phone,

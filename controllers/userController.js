@@ -2,21 +2,14 @@ import {
   loginDataService,
   logoutUserDataService,
   regenerateTokenDataService,
-  registerDataService,
+  addDataService,
   safeUserCloneDataService,
   updateUserUserDataService,
 } from "../services/userServices.js";
 
-export const register = async (req, res) => {
+export const add = async (req, res) => {
   const { email, name, phone, password, admin, pm } = req.body;
-  const newUser = await registerDataService(
-    email,
-    name,
-    phone,
-    password,
-    admin,
-    pm
-  );
+  const newUser = await addDataService(email, name, phone, password, admin, pm);
 
   res.status(200).json({
     user: safeUserCloneDataService(newUser),

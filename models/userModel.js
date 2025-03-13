@@ -46,7 +46,7 @@ const userSchema = new Schema(
   }
 );
 
-const registerSchema = Joi.object({
+const addSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(4).max(22).required(),
   name: Joi.string(),
@@ -75,7 +75,7 @@ const updateUserSchema = Joi.object({
 });
 
 export const Schemas = {
-  registerSchema,
+  addSchema,
   loginSchema,
   updateUserSchema,
   refreshSchema,

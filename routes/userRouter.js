@@ -11,9 +11,9 @@ import * as controllers from "../controllers/userController.js";
 const userRouter = express.Router();
 userRouter
   .post(
-    "/register",
+    "/add",
     validateBody(Schemas.registerSchema),
-    errorHandling(controllers.register)
+    errorHandling(controllers.add)
   )
   .post(
     "/login",
