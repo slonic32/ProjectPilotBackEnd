@@ -6,6 +6,7 @@ export const authenticate = async (req, res, next) => {
     const token =
       req.headers.authorization?.startsWith("Bearer") &&
       req.headers.authorization.split(" ")[1];
+
     const id = checkToken(token);
     const currentUser = id ? await User.findById(id) : null;
 

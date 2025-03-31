@@ -25,7 +25,7 @@ export const login = async (req, res) => {
   res.status(200).json({
     user: safeUserCloneDataService(user),
     token: user.token,
-    refreshtoken: user.refreshtoken,
+    refreshToken: user.refreshToken,
   });
 };
 
@@ -47,8 +47,8 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const refreshTokens = async (req, res) => {
-  const { token, refreshtoken } = await regenerateTokenDataService(req.user);
-  res.status(200).json({ token, refreshtoken });
+  const { token, refreshToken } = await regenerateTokenDataService(req.user);
+  res.status(200).json({ token, refreshToken });
 };
 
 export const all = async (req, res) => {
