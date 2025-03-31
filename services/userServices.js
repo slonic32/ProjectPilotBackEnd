@@ -46,32 +46,15 @@ export const logoutUserDataService = async (currentUser) => {
   );
 };
 
-export const updateUserDataService = async (
-  currentUser,
-  email,
-  name,
-  phone,
-  password,
-  admin,
-  pm
-) => {
+export const updateUserDataService = async (currentUser, newData) => {
   if (!currentUser) throw HttpError(401, "User not found");
-  if (password) {
-    password = await bcrypt.hash(password, 10);
+  if (newData.password) {
+    newData.password = await bcrypt.hash(password, 10);
   }
   try {
-    return await User.findByIdAndUpdate(
-      currentUser._id,
-      {
-        email,
-        name,
-        phone,
-        password,
-        admin,
-        pm,
-      },
-      { new: true }
-    );
+    return await User.findByIdAndUpdate(currentUser._id, newData, {
+      new: true,
+    });
   } catch (error) {
     throw HttpError(501, error);
   }

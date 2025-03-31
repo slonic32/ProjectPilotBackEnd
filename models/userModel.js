@@ -47,16 +47,16 @@ const userSchema = new Schema(
 );
 
 const addSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(4).max(22).required(),
-  name: Joi.string(),
-  phone: Joi.string(),
+  email: Joi.string().trim().email().required(),
+  password: Joi.string().trim().min(4).max(22).required(),
+  name: Joi.string().trim(),
+  phone: Joi.string().trim(),
   admin: Joi.boolean(),
   pm: Joi.boolean(),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string().email().required(),
   password: Joi.string().min(4).max(22).required(),
 });
 
@@ -65,14 +65,23 @@ const refreshSchema = Joi.object({
 });
 
 const updateUserSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().pattern(emailRegexp),
-  password: Joi.string().min(4).max(22),
-  avatarURL: Joi.string(),
-  name: Joi.string(),
-  phone: Joi.string(),
-  admin: Joi.boolean(),
-  pm: Joi.boolean(),
+  name: Joi.string().trim().allow("").optional(),
+  email: Joi.string().trim().allow("").email().optional(),
+  password: Joi.string()
+    .trim()
+    .allow("")
+    .optional()
+    .custom((value, helpers) => {
+      if (!value || (value.length >= 4 && value.length <= 22)) {
+        return value;
+      }
+      return helpers.error("any.invalid", {
+        message: "Password must be between 4 and 22 characters long",
+      });
+    }),
+  phone: Joi.string().trim().allow("").optional(),
+  admin: Joi.boolean().optional(),
+  pm: Joi.boolean().optional(),
 });
 
 export const Schemas = {

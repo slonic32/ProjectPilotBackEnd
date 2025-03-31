@@ -9,6 +9,8 @@ import {
   deleteUserDataService,
 } from "../services/userServices.js";
 
+import { resizeImg } from "../services/imgServices.js";
+
 export const add = async (req, res) => {
   const { email, name, phone, password, admin, pm } = req.body;
   const newUser = await addDataService(email, name, phone, password, admin, pm);
@@ -38,20 +40,37 @@ export const current = async (req, res) => {
   res.status(200).json({ user: safeUserCloneDataService(req.user) });
 };
 
+function removeEmptyProps(obj) {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    if (
+      value !== undefined &&
+      value !== null &&
+      value !== "" &&
+      !(Array.isArray(value) && value.length === 0)
+    ) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+}
+
 export const updateUser = async (req, res, next) => {
   let editedUser = {};
   const user = req.user;
-  const { email, name, phone, password, admin, pm } = req.body;
+  const dirtyData = req.body;
+  const clearData = removeEmptyProps(dirtyData);
 
-  editedUser = await updateUserDataService(
-    user,
-    email,
-    name,
-    phone,
-    password,
-    admin,
-    pm
-  );
+  if (req.file) {
+    const avatarURL = await resizeImg(req.file);
+    editedUser = await updateUserDataService(user, {
+      ...clearData,
+      avatarURL,
+    });
+  } else {
+    editedUser = await updateUserDataService(user, {
+      ...clearData,
+    });
+  }
 
   res.status(200).json({ user: safeUserCloneDataService(editedUser) });
 };
