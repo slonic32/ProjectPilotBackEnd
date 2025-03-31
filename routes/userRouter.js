@@ -25,7 +25,12 @@ userRouter
   )
   .get("/logout", authenticate, errorHandling(controllers.logout))
   .get("/current", authenticate, errorHandling(controllers.current))
-  .patch("/update", authenticate, errorHandling(controllers.updateUser))
+  .patch(
+    "/update",
+    authenticate,
+    validateBody(Schemas.updateUserSchema),
+    errorHandling(controllers.updateUser)
+  )
   .patch(
     "/refresh",
     authenticateRefresh,

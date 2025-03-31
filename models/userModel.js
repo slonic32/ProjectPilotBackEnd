@@ -67,6 +67,7 @@ const refreshSchema = Joi.object({
 const updateUserSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().pattern(emailRegexp),
+  password: Joi.string().min(4).max(22),
   avatarURL: Joi.string(),
   name: Joi.string(),
   phone: Joi.string(),

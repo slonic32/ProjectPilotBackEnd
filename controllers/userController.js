@@ -4,7 +4,7 @@ import {
   regenerateTokenDataService,
   addDataService,
   safeUserCloneDataService,
-  updateUserUserDataService,
+  updateUserDataService,
   allUserDataService,
   deleteUserDataService,
 } from "../services/userServices.js";
@@ -40,10 +40,20 @@ export const current = async (req, res) => {
 
 export const updateUser = async (req, res, next) => {
   let editedUser = {};
+  const user = req.user;
+  const { email, name, phone, password, admin, pm } = req.body;
 
-  editedUser = await updateUserUserDataService(req.user, req.body);
+  editedUser = await updateUserDataService(
+    user,
+    email,
+    name,
+    phone,
+    password,
+    admin,
+    pm
+  );
 
-  res.status(200).json(safeUserCloneDataService(editedUser));
+  res.status(200).json({ user: safeUserCloneDataService(editedUser) });
 };
 
 export const refreshTokens = async (req, res) => {
