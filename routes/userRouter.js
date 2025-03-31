@@ -8,6 +8,7 @@ import { validateBody } from "../middleware/validateBody.js";
 import { Schemas } from "../models/userModel.js";
 import { errorHandling } from "../helpers/errorHandlingWrapper.js";
 import * as controllers from "../controllers/userController.js";
+import { uploadImage } from "../middleware/imgUploader.js";
 
 const userRouter = express.Router();
 userRouter
@@ -28,6 +29,7 @@ userRouter
   .patch(
     "/update",
     authenticate,
+    uploadImage,
     validateBody(Schemas.updateUserSchema),
     errorHandling(controllers.updateUser)
   )
