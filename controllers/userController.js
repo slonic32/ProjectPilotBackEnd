@@ -7,6 +7,7 @@ import {
   updateUserDataService,
   allUserDataService,
   deleteUserDataService,
+  editUserDataService,
 } from "../services/userServices.js";
 
 import { resizeImg } from "../services/imgServices.js";
@@ -54,7 +55,7 @@ function removeEmptyProps(obj) {
   }, {});
 }
 
-export const updateUser = async (req, res, next) => {
+export const updateUser = async (req, res) => {
   let editedUser = {};
   const user = req.user;
   const dirtyData = req.body;
@@ -94,4 +95,21 @@ export const deleteUser = async (req, res) => {
     user: safeUserCloneDataService(deletedData),
     message: "User was deleted",
   });
+};
+
+export const editUser = async (req, res) => {
+  const id = req.params.id;
+  const currentUser = req.user;
+  const dirtyData = req.body;
+  const clearData = removeEmptyProps(dirtyData);
+
+  const editedUser = await editUserDataService(
+    id,
+    {
+      ...clearData,
+    },
+    currentUser
+  );
+
+  res.status(200).json({ user: safeUserCloneDataService(editedUser) });
 };
