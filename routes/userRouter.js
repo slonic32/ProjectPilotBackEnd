@@ -76,7 +76,7 @@ export default userRouter;
  *         pm:
  *           type: boolean
  *
- * /api/add:
+ * /api/users/add:
  *   post:
  *     summary: Add a new user
  *     tags: [User API]
@@ -119,7 +119,7 @@ export default userRouter;
  *       500:
  *         description: Server error
  *
- * /api/login:
+ * /api/users/login:
  *   post:
  *     summary: Login user
  *     tags: [User API]
@@ -154,7 +154,7 @@ export default userRouter;
  *       401:
  *         description: Invalid credentials
  *
- * /api/logout:
+ * /api/users/logout:
  *   get:
  *     summary: Logout user
  *     tags: [User API]
@@ -164,7 +164,7 @@ export default userRouter;
  *       204:
  *         description: Logout successful
  *
- * /api/current:
+ * /api/users/current:
  *   get:
  *     summary: Get current user
  *     tags: [User API]
@@ -183,7 +183,7 @@ export default userRouter;
  *       401:
  *         description: Unauthorized
  *
- * /api/update:
+ * /api/users/update:
  *   patch:
  *     summary: Update current user
  *     tags: [User API]
@@ -218,7 +218,7 @@ export default userRouter;
  *       401:
  *         description: Unauthorized
  *
- * /api/refresh:
+ * /api/users/refresh:
  *   patch:
  *     summary: Refresh authentication tokens
  *     tags: [User API]
@@ -248,7 +248,7 @@ export default userRouter;
  *       401:
  *         description: Unauthorized
  *
- * /api/all:
+ * /api/users/all:
  *   get:
  *     summary: Get all users
  *     tags: [User API]
@@ -269,7 +269,7 @@ export default userRouter;
  *       401:
  *         description: Unauthorized
  *
- * /api/{id}:
+ * /api/users/{id}:
  *   delete:
  *     summary: Delete user by ID
  *     tags: [User API]
