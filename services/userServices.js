@@ -98,3 +98,26 @@ export const deleteUserDataService = async (id, currentUser) => {
     throw error;
   }
 };
+
+export const editUserDataService = async (id, newData, currentUser) => {
+  try {
+    const isValid = isValidObjectId(id);
+
+    if (!isValid) {
+      throw HttpError(404, "User not found");
+    }
+
+    if (id === currentUser._id) {
+      throw HttpError(409, "Can't edit current user!");
+    }
+    if (newData.password) {
+      newData.password = await bcrypt.hash(password, 10);
+    }
+
+    return await User.findByIdAndUpdate(id, newData, {
+      new: true,
+    });
+  } catch (error) {
+    throw HttpError(501, error);
+  }
+};

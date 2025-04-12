@@ -40,273 +40,23 @@ userRouter
     errorHandling(controllers.refreshTokens)
   )
   .get("/all", authenticate, isAdmin, errorHandling(controllers.all))
-  .delete("/:id", authenticate, isAdmin, errorHandling(controllers.deleteUser));
+  .delete("/:id", authenticate, isAdmin, errorHandling(controllers.deleteUser))
+  .patch("/:id", authenticate, isAdmin, errorHandling(controllers.editUser));
 
 export default userRouter;
 
 /**
  * @swagger
- * /api/add:
- *   post:
- *     summary: Adding a user
- *     description: Private route to add a new user
- *     tags: ["User API"]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: Jessica.Smith@gmail.com
- *               password:
- *                 type: string
- *                 format: password
- *     responses:
- *       '201':
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *                 token:
- *                   type: string
- *                   description: Issued Authentication token
- *                 refreshToken:
- *                   type: string
- *                   description: Refresh token, can be used to re-issue the Authentication token if expired
- *       '409':
- *         description: The email provided is already in use.
- *       '500':
- *         description: Unexpected Server Error.
- *
- * /api/login:
- *   post:
- *     summary: User Login Route
- *     description: Public route for user login
- *     tags: ["User API"]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: Jessica.Smith@gmail.com
- *               password:
- *                 type: string
- *     responses:
- *       '200':
- *         description: Logged In Successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *                 token:
- *                   type: string
- *                   description: Issued Authentication token
- *                 refreshToken:
- *                   type: string
- *                   description: Refresh token, can be used to re-issue the Authentication token if expired
- *       '401':
- *         description: Not Authorized
- *
- * /api/logout:
- *   get:
- *     summary: Log Out Current User
- *     description: Private route to logout current user
- *     tags: ["User API"]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *           example: Bearer abcde_12345
- *
- * /api/current:
- *   get:
- *     summary: Current User Information
- *     description: Private route which returns current user information
- *     tags: ["User API"]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *           example: Bearer abcde_12345
- *     responses:
- *       '200':
- *         description: Successfully retrieved user
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       '401':
- *         description: Not Authorized
- *
- * /api/all:
- *   get:
- *     summary: All Users Information
- *     description: Private route which returns all users
- *     tags: ["User API"]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *           example: Bearer abcde_12345
- *     responses:
- *       '200':
- *         description: Array of users
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
- *       '401':
- *         description: Not Authorized
- * 
- * /api/{id}:
- *   delete:
- *     summary: Delete a user
- *     description: Private route to delete a user (Admin only)
- *     tags: ["User API"]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Unique ID of the user to be deleted
- *         example: "60d21b4667d0d8992e610c85"
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *         description: Bearer token for authentication
- *         example: "Bearer abcde_12345"
- *     responses:
- *       '200':
- *         description: User deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *                 message:
- *                   type: string
- *                   example: "User was deleted successfully"
- *       '401':
- *         description: Not authorized
- *       '403':
- *         description: Admin access required
- *       '404':
- *         description: User not found
- *       '500':
- *         description: Unexpected server error
-
- *
- * /api/update:
- *   patch:
- *     summary: Update User Settings
- *     description: Private route to update user settings
- *     tags: ["User API"]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *           example: Bearer abcde_12345
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *                 format: email
- *               avatar:
- *                 type: string
- *                 format: binary
- *     responses:
- *       '200':
- *         description: Updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       '401':
- *         description: Not Authorized or User not Found
- *
- * /api/refresh:
- *   patch:
- *     summary: Regenerate Authentication Tokens
- *     description: Private route to re-generate authentication and refresh tokens
- *     tags: ["User API"]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *           example: Bearer abcde_12345
- *     responses:
- *       '200':
- *         description: Token was regenerated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *                   description: Issued Authentication token
- *                 refreshToken:
- *                   type: string
- *                   description: Refresh token, can be used to re-issue the Authentication token if expired
- *       '401':
- *         description: Not authorized
+ * tags:
+ *   - name: User API
+ *     description: Operations related to user management
  *
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  *   schemas:
  *     User:
  *       type: object
@@ -325,4 +75,273 @@ export default userRouter;
  *           type: boolean
  *         pm:
  *           type: boolean
+ *
+ * /api/add:
+ *   post:
+ *     summary: Add a new user
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               admin:
+ *                 type: boolean
+ *               pm:
+ *                 type: boolean
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       409:
+ *         description: Email already in use
+ *       500:
+ *         description: Server error
+ *
+ * /api/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [User API]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 token:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *       401:
+ *         description: Invalid credentials
+ *
+ * /api/logout:
+ *   get:
+ *     summary: Logout user
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       204:
+ *         description: Logout successful
+ *
+ * /api/current:
+ *   get:
+ *     summary: Get current user
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User data retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/update:
+ *   patch:
+ *     summary: Update current user
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: User updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/refresh:
+ *   patch:
+ *     summary: Refresh authentication tokens
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Tokens refreshed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/all:
+ *   get:
+ *     summary: Get all users
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/{id}:
+ *   delete:
+ *     summary: Delete user by ID
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *
+ *   patch:
+ *     summary: Edit user by ID
+ *     tags: [User API]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               admin:
+ *                 type: boolean
+ *               pm:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: User edited
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       409:
+ *         description: Cannot edit your own user
  */
