@@ -83,7 +83,7 @@ export const deleteUserDataService = async (id, currentUser) => {
       throw HttpError(404, "User not found");
     }
 
-    if (id === currentUser._id) {
+    if (id === currentUser.id) {
       throw HttpError(409, "Can't delete current user!");
     }
 
@@ -107,7 +107,7 @@ export const editUserDataService = async (id, newData, currentUser) => {
       throw HttpError(404, "User not found");
     }
 
-    if (id === currentUser._id) {
+    if (id === currentUser.id) {
       throw HttpError(409, "Can't edit current user!");
     }
     if (newData.password) {
