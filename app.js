@@ -8,6 +8,7 @@ import { globalErrorHandler } from "./helpers/globalErrorHandler.js";
 import userRouter from "./routes/userRouter.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./helpers/swagger.js";
+import projectRouter from "./routes/projectRouter.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(express.static("public"));
 const pathPrefix = "/api";
 app.use(`${pathPrefix}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(`${pathPrefix}/users`, userRouter);
+app.use(`${pathPrefix}/projects`, projectRouter);
 
 app.use((_, res, next) => {
   next(HttpError(404, "Route not found"));

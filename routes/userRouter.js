@@ -5,7 +5,7 @@ import {
   isAdmin,
 } from "../middleware/authenticate.js";
 import { validateBody } from "../middleware/validateBody.js";
-import { Schemas } from "../models/userModel.js";
+import { Schemas } from "../schemas/userSchemas.js";
 import { errorHandling } from "../helpers/errorHandlingWrapper.js";
 import * as controllers from "../controllers/userController.js";
 import { uploadImage } from "../middleware/imgUploader.js";
