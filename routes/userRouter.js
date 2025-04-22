@@ -3,6 +3,7 @@ import {
   authenticate,
   authenticateRefresh,
   isAdmin,
+  isPM,
 } from "../middleware/authenticate.js";
 import { validateBody } from "../middleware/validateBody.js";
 import { Schemas } from "../schemas/userSchemas.js";
@@ -39,7 +40,7 @@ userRouter
     validateBody(Schemas.refreshSchema),
     errorHandling(controllers.refreshTokens)
   )
-  .get("/all", authenticate, isAdmin, errorHandling(controllers.all))
+  .get("/all", authenticate, isPM, errorHandling(controllers.all))
   .delete("/:id", authenticate, isAdmin, errorHandling(controllers.deleteUser))
   .patch("/:id", authenticate, isAdmin, errorHandling(controllers.editUser));
 
