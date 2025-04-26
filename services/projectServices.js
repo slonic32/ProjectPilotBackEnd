@@ -34,7 +34,7 @@ export const getProjectById = async (user, id) => {
     throw HttpError(404, "Project not found");
   }
 
-  if (!user.admin || user.id !== project.pm.id) {
+  if (!user.admin && user.id !== project.pm.id) {
     throw HttpError(401, "You are not a PM!");
   }
 
@@ -54,7 +54,7 @@ export const updateProject = async (user, id, data) => {
     throw HttpError(404, "Project not found");
   }
 
-  if (!user.admin || user.id !== project.pm.id) {
+  if (!user.admin && user.id !== project.pm.id) {
     throw HttpError(401, "You are not a PM!");
   }
 
@@ -63,7 +63,7 @@ export const updateProject = async (user, id, data) => {
   return updated;
 };
 
-export const deleteProject = async (id) => {
+export const deleteProject = async (user, id) => {
   const isValid = isValidObjectId(id);
 
   if (!isValid) {
@@ -76,7 +76,7 @@ export const deleteProject = async (id) => {
     throw HttpError(404, "Project not found");
   }
 
-  if (!user.admin || user.id !== project.pm.id) {
+  if (!user.admin && user.id !== project.pm.id) {
     throw HttpError(401, "You are not a PM!");
   }
 
