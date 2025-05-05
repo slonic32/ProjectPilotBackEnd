@@ -1,5 +1,7 @@
 import { User } from "../models/userModel.js";
 import { checkToken } from "../services/jwtServices.js";
+import { Project } from "../models/projectModel.js";
+import { isValidObjectId } from "mongoose";
 
 export const authenticate = async (req, res, next) => {
   try {

@@ -32,3 +32,30 @@ export const remove = async (req, res) => {
   const deleted = await services.deleteProject(user, id);
   res.status(200).json({ message: "Project deleted", project: deleted });
 };
+
+export const updateProjectCharter = async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+  const updates = req.body;
+
+  const result = await services.updateProjectCharter(user, id, updates);
+  res.status(200).json({ developProjectCharter: result });
+};
+
+export const updateStakeholders = async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+  const updates = req.body;
+
+  const result = await services.updateStakeholders(user, id, updates);
+  res.status(200).json({ identifyStakeholders: result });
+};
+
+export const closeProject = async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+  const updates = req.body;
+
+  const result = await services.closeProject(user, id, updates);
+  res.status(200).json(result);
+};
