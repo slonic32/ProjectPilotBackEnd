@@ -170,3 +170,46 @@ export const closeProject = async (user, id, updates) => {
     closed: project.closed,
   };
 };
+
+const checkPlanningAccess = async (user, projectId) => {
+  if (!isValidObjectId(projectId)) throw HttpError(404, "Invalid project ID");
+  const project = await Project.findById(projectId);
+  if (!project) throw HttpError(404, "Project not found");
+
+  const allowed =
+    user.admin ||
+    user.id === project.pm.toString() ||
+    project.acs.planning.some((uid) => uid.toString() === user.id);
+
+  if (!allowed) throw HttpError(403, "Access denied: Not in planning phase");
+
+  return project;
+};
+
+export const updatePlanScopeManagement = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.scope.planScopeManagement = data;
+  await project.save();
+  return project.planning.scope.planScopeManagement;
+};
+
+export const updateCollectRequirements = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.scope.collectRequirements = data;
+  await project.save();
+  return project.planning.scope.collectRequirements;
+};
+
+export const updateDefineScope = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.scope.defineScope = data;
+  await project.save();
+  return project.planning.scope.defineScope;
+};
+
+export const updateCreateWBS = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.scope.createWBS = data;
+  await project.save();
+  return project.planning.scope.createWBS;
+};

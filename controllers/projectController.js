@@ -59,3 +59,39 @@ export const closeProject = async (req, res) => {
   const result = await services.closeProject(user, id, updates);
   res.status(200).json(result);
 };
+
+export const updatePlanScopeManagement = async (req, res) => {
+  const result = await service.updatePlanScopeManagement(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ planScopeManagement: result });
+};
+
+export const updateCollectRequirements = async (req, res) => {
+  const result = await service.updateCollectRequirements(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ collectRequirements: result });
+};
+
+export const updateDefineScope = async (req, res) => {
+  const result = await service.updateDefineScope(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ defineScope: result });
+};
+
+export const updateCreateWBS = async (req, res) => {
+  const result = await service.updateCreateWBS(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ createWBS: result });
+};

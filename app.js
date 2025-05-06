@@ -9,6 +9,8 @@ import userRouter from "./routes/userRouter.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./helpers/swagger.js";
 import projectRouter from "./routes/projectRouter.js";
+import workRouter from "./routes/workRouter.js";
+import deliverableRouter from "./routes/deliverableRouter.js";
 
 dotenv.config();
 
@@ -31,6 +33,8 @@ const pathPrefix = "/api";
 app.use(`${pathPrefix}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(`${pathPrefix}/users`, userRouter);
 app.use(`${pathPrefix}/projects`, projectRouter);
+app.use(`${pathPrefix}/works`, workRouter);
+app.use(`${pathPrefix}/deliverables`, deliverableRouter);
 
 app.use((_, res, next) => {
   next(HttpError(404, "Route not found"));
