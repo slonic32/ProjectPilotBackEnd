@@ -59,3 +59,54 @@ export const closeProject = async (req, res) => {
   const result = await services.closeProject(user, id, updates);
   res.status(200).json(result);
 };
+
+export const updatePlanScopeManagement = async (req, res) => {
+  const result = await services.updatePlanScopeManagement(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ planScopeManagement: result });
+};
+
+export const updateCollectRequirements = async (req, res) => {
+  const result = await services.updateCollectRequirements(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ collectRequirements: result });
+};
+
+export const updateDefineScope = async (req, res) => {
+  const result = await services.updateDefineScope(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ defineScope: result });
+};
+
+export const updateCreateWBS = async (req, res) => {
+  const result = await services.updateCreateWBS(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ createWBS: result });
+};
+
+export const getInitiating = async (req, res) => {
+  const result = await services.getInitiatingSection(req.user, req.params.id);
+  res.status(200).json(result);
+};
+
+export const getPlanning = async (req, res) => {
+  const result = await services.getPlanningSection(req.user, req.params.id);
+  res.status(200).json(result);
+};
+
+export const getClosing = async (req, res) => {
+  const result = await services.getClosingSection(req.user, req.params.id);
+  res.status(200).json(result);
+};

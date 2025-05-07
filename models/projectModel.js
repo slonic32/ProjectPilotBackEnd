@@ -52,8 +52,8 @@ const projectSchema = new Schema(
           objective: { type: String, default: "" },
           successCriteria: { type: String, default: "" },
           sponsors: { type: [String], default: [] },
-          majorDeliverables: { type: String },
-          acceptanceCriteria: { type: String },
+          majorDeliverables: { type: String, default: "" },
+          acceptanceCriteria: { type: String, default: "" },
           milestone_schedule: {
             type: [
               {
@@ -83,6 +83,65 @@ const projectSchema = new Schema(
       integration: {
         closeProject: {
           closedDate: { type: Date },
+        },
+      },
+    },
+    planning: {
+      scope: {
+        planScopeManagement: {
+          scopeManagementPlan: {
+            type: {
+              projectScopeStatement: { type: String, required: true },
+              WBS: { type: String, required: true },
+              scopeBaseline: { type: String, required: true },
+              projectDeliverables: { type: String, required: true },
+            },
+            default: {},
+          },
+          requirementsManagementPlan: {
+            type: {
+              requirementActivities: { type: String, required: true },
+              changesManagedApproved: { type: String, required: true },
+              requirementPrioritised: { type: String, required: true },
+              metricsUsed: { type: String, required: true },
+            },
+            default: {},
+          },
+        },
+        collectRequirements: {
+          requirements: {
+            type: [
+              {
+                requirement: { type: String, required: true },
+                documentation: { type: String, required: true },
+              },
+            ],
+            default: [],
+          },
+        },
+        defineScope: {
+          endProductScopeDescription: {
+            type: String,
+            default: "",
+          },
+          deliverables: {
+            type: [{ type: Schema.Types.ObjectId, ref: "deliverables" }],
+            default: [],
+          },
+          acceptanceCriteria: {
+            type: [{ type: String, required: true }],
+            default: [],
+          },
+          exclusions: {
+            type: [{ type: String, required: true }],
+            default: [],
+          },
+        },
+        createWBS: {
+          WBS: {
+            type: [{ type: Schema.Types.ObjectId, ref: "works" }],
+            default: [],
+          },
         },
       },
     },

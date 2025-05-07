@@ -4,6 +4,7 @@ import { validateBody } from "../middleware/validateBody.js";
 import { projectSchemas } from "../schemas/projectSchemas.js";
 import * as controllers from "../controllers/projectController.js";
 import { errorHandling } from "../helpers/errorHandlingWrapper.js";
+import { planningSchemas } from "../schemas/planningSchemas.js";
 
 const router = express.Router();
 
@@ -39,7 +40,38 @@ router
     "/:id/closing/integration/closeProject",
     authenticate,
     errorHandling(controllers.closeProject)
-  );
+  )
+  .patch(
+    "/:id/planning/scope/planScopeManagement",
+    authenticate,
+    validateBody(planningSchemas.planScopeManagement),
+    errorHandling(controllers.updatePlanScopeManagement)
+  )
+  .patch(
+    "/:id/planning/scope/collectRequirements",
+    authenticate,
+    validateBody(planningSchemas.collectRequirements),
+    errorHandling(controllers.updateCollectRequirements)
+  )
+  .patch(
+    "/:id/planning/scope/defineScope",
+    authenticate,
+    validateBody(planningSchemas.defineScope),
+    errorHandling(controllers.updateDefineScope)
+  )
+  .patch(
+    "/:id/planning/scope/createWBS",
+    authenticate,
+    validateBody(planningSchemas.createWBS),
+    errorHandling(controllers.updateCreateWBS)
+  )
+  .get(
+    "/:id/initiation",
+    authenticate,
+    errorHandling(controllers.getInitiating)
+  )
+  .get("/:id/closing", authenticate, errorHandling(controllers.getClosing))
+  .get("/:id/planning", authenticate, errorHandling(controllers.getPlanning));
 
 export default router;
 
@@ -156,6 +188,63 @@ export default router;
  *       '404':
  *         description: Project not found
  *
+ * /api/projects/{id}/initiation:
+ *   get:
+ *     summary: Retrieve the full initiation section of a project
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     responses:
+ *       200:
+ *         description: Initiation phase details
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/projects/{id}/closing:
+ *   get:
+ *     summary: Retrieve the closing documentation of a project
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     responses:
+ *       200:
+ *         description: Closing phase details
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/projects/{id}/planning:
+ *   get:
+ *     summary: Retrieve the full planning documentation
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     responses:
+ *       200:
+ *         description: Planning phase details
+ *       401:
+ *         description: Unauthorized
+ *
  * /api/projects/{id}/initiating/integration/developProjectCharter:
  *   patch:
  *     summary: Submit or update the Project Charter document
@@ -241,6 +330,167 @@ export default router;
  *       '403':
  *         description: User not authorized to close project
  *       '404':
+ *         description: Project not found
+ *
+ * /api/projects/{id}/planning/scope/planScopeManagement:
+ *   patch:
+ *     summary: Update Scope and Requirements Management Plan
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               scopeManagementPlan:
+ *                 type: object
+ *                 properties:
+ *                   projectScopeStatement:
+ *                     type: string
+ *                   WBS:
+ *                     type: string
+ *                   scopeBaseline:
+ *                     type: string
+ *                   projectDeliverables:
+ *                     type: string
+ *               requirementsManagementPlan:
+ *                 type: object
+ *                 properties:
+ *                   requirementActivities:
+ *                     type: string
+ *                   changesManagedApproved:
+ *                     type: string
+ *                   requirementPrioritised:
+ *                     type: string
+ *                   metricsUsed:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Planning documents updated
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Project not found
+ *
+ * /api/projects/{id}/planning/scope/collectRequirements:
+ *   patch:
+ *     summary: Update Requirements List
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               requirements:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     requirement:
+ *                       type: string
+ *                     documentation:
+ *                       type: string
+ *     responses:
+ *       200:
+ *         description: Requirements updated
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Project not found
+ *
+ * /api/projects/{id}/planning/scope/defineScope:
+ *   patch:
+ *     summary: Define Product Scope, Deliverables and Boundaries
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               endProductScopeDescription:
+ *                 type: string
+ *               deliverables:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               acceptanceCriteria:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               exclusions:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Scope updated
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Project not found
+ *
+ * /api/projects/{id}/planning/scope/createWBS:
+ *   patch:
+ *     summary: Assign Work Breakdown Structure (WBS)
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               WBS:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: WBS assigned
+ *       403:
+ *         description: Access denied
+ *       404:
  *         description: Project not found
  *
  * components:
