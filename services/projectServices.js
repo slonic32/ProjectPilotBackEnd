@@ -213,3 +213,39 @@ export const updateCreateWBS = async (user, id, data) => {
   await project.save();
   return project.planning.scope.createWBS;
 };
+
+const checkRoleAccess = (user, project, phase) => {
+  const allowed =
+    user.admin ||
+    user.id === project.pm.toString() ||
+    project.acs[phase].some((uid) => uid.toString() === user.id);
+
+  if (!allowed) throw HttpError(403, `Access denied: Not in ${phase} phase`);
+};
+
+export const getInitiatingSection = async (user, projectId) => {
+  if (!isValidObjectId(projectId)) throw HttpError(404, "Invalid project ID");
+  const project = await Project.findById(projectId);
+  if (!project) throw HttpError(404, "Project not found");
+
+  checkRoleAccess(user, project, "initiating");
+  return project.initiating;
+};
+
+export const getPlanningSection = async (user, projectId) => {
+  if (!isValidObjectId(projectId)) throw HttpError(404, "Invalid project ID");
+  const project = await Project.findById(projectId);
+  if (!project) throw HttpError(404, "Project not found");
+
+  checkRoleAccess(user, project, "planning");
+  return project.planning;
+};
+
+export const getClosingSection = async (user, projectId) => {
+  if (!isValidObjectId(projectId)) throw HttpError(404, "Invalid project ID");
+  const project = await Project.findById(projectId);
+  if (!project) throw HttpError(404, "Project not found");
+
+  checkRoleAccess(user, project, "closing");
+  return { ...project.closing, closed: project.closed };
+};

@@ -13,13 +13,13 @@ export const planningSchemas = {
       WBS: Joi.string().required(),
       scopeBaseline: Joi.string().required(),
       projectDeliverables: Joi.string().required(),
-    }).required(),
+    }),
     requirementsManagementPlan: Joi.object({
       requirementActivities: Joi.string().required(),
       changesManagedApproved: Joi.string().required(),
       requirementPrioritised: Joi.string().required(),
       metricsUsed: Joi.string().required(),
-    }).required(),
+    }),
   }),
 
   collectRequirements: Joi.object({

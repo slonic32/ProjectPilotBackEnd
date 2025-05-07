@@ -44,19 +44,19 @@ router
   .patch(
     "/:id/planning/scope/planScopeManagement",
     authenticate,
-    validateBody(planningSchemas.updatePlanScopeManagement),
+    validateBody(planningSchemas.planScopeManagement),
     errorHandling(controllers.updatePlanScopeManagement)
   )
   .patch(
     "/:id/planning/scope/collectRequirements",
     authenticate,
-    validateBody(planningSchemas.updateCollectRequirements),
+    validateBody(planningSchemas.collectRequirements),
     errorHandling(controllers.updateCollectRequirements)
   )
   .patch(
     "/:id/planning/scope/defineScope",
     authenticate,
-    validateBody(planningSchemas.updateDefineScope),
+    validateBody(planningSchemas.defineScope),
     errorHandling(controllers.updateDefineScope)
   )
   .patch(
@@ -64,7 +64,14 @@ router
     authenticate,
     validateBody(planningSchemas.createWBS),
     errorHandling(controllers.updateCreateWBS)
-  );
+  )
+  .get(
+    "/:id/initiation",
+    authenticate,
+    errorHandling(controllers.getInitiating)
+  )
+  .get("/:id/closing", authenticate, errorHandling(controllers.getClosing))
+  .get("/:id/planning", authenticate, errorHandling(controllers.getPlanning));
 
 export default router;
 
@@ -180,6 +187,63 @@ export default router;
  *         description: Unauthorized
  *       '404':
  *         description: Project not found
+ *
+ * /api/projects/{id}/initiation:
+ *   get:
+ *     summary: Retrieve the full initiation section of a project
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     responses:
+ *       200:
+ *         description: Initiation phase details
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/projects/{id}/closing:
+ *   get:
+ *     summary: Retrieve the closing documentation of a project
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     responses:
+ *       200:
+ *         description: Closing phase details
+ *       401:
+ *         description: Unauthorized
+ *
+ * /api/projects/{id}/planning:
+ *   get:
+ *     summary: Retrieve the full planning documentation
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     responses:
+ *       200:
+ *         description: Planning phase details
+ *       401:
+ *         description: Unauthorized
  *
  * /api/projects/{id}/initiating/integration/developProjectCharter:
  *   patch:

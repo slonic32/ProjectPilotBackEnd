@@ -120,7 +120,10 @@ const projectSchema = new Schema(
           },
         },
         defineScope: {
-          endProductScopeDescription: { type: String, required: true },
+          endProductScopeDescription: {
+            type: String,
+            default: "",
+          },
           deliverables: {
             type: [{ type: Schema.Types.ObjectId, ref: "deliverables" }],
             default: [],
