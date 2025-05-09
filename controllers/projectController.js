@@ -110,3 +110,57 @@ export const getClosing = async (req, res) => {
   const result = await services.getClosingSection(req.user, req.params.id);
   res.status(200).json(result);
 };
+
+export const updatePlanScheduleManagement = async (req, res) => {
+  const result = await services.updatePlanScheduleManagement(
+    req.user,
+    req.params.id,
+    req.body.scheduleManagementPlan
+  );
+  res.status(200).json({ scheduleManagementPlan: result });
+};
+
+export const updatePlanCostManagement = async (req, res) => {
+  const result = await services.updatePlanCostManagement(
+    req.user,
+    req.params.id,
+    req.body.costManagementPlan
+  );
+  res.status(200).json({ costManagementPlan: result });
+};
+
+export const updateEstimateCost = async (req, res) => {
+  const result = await services.updateEstimateCost(
+    req.user,
+    req.params.id,
+    req.body.costEstimates
+  );
+  res.status(200).json({ costEstimates: result });
+};
+
+export const updateDetermineBudget = async (req, res) => {
+  const result = await services.updateDetermineBudget(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ determineBudget: result });
+};
+
+export const updatePlanResourceManagement = async (req, res) => {
+  const result = await services.updatePlanResourceManagement(
+    req.user,
+    req.params.id,
+    req.body.resourceManagementPlan
+  );
+  res.status(200).json({ resourceManagementPlan: result });
+};
+
+export const updateEstimateActivityResource = async (req, res) => {
+  const result = await services.updateEstimateActivityResource(
+    req.user,
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({ estimateActivityResource: result });
+};

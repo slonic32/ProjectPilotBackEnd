@@ -249,3 +249,49 @@ export const getClosingSection = async (user, projectId) => {
   checkRoleAccess(user, project, "closing");
   return { ...project.closing, closed: project.closed };
 };
+
+export const updatePlanScheduleManagement = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.schedule.planScheduleManagement.scheduleManagementPlan =
+    data;
+  await project.save();
+  return project.planning.schedule.planScheduleManagement
+    .scheduleManagementPlan;
+};
+
+export const updatePlanCostManagement = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.cost.planCostManagement.costManagementPlan = data;
+  await project.save();
+  return project.planning.cost.planCostManagement.costManagementPlan;
+};
+
+export const updateEstimateCost = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.cost.estimateCost.costEstimates = data;
+  await project.save();
+  return project.planning.cost.estimateCost.costEstimates;
+};
+
+export const updateDetermineBudget = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.cost.determineBudget = data;
+  await project.save();
+  return project.planning.cost.determineBudget;
+};
+
+export const updatePlanResourceManagement = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.resource.planResourceManagement.resourceManagementPlan =
+    data;
+  await project.save();
+  return project.planning.resource.planResourceManagement
+    .resourceManagementPlan;
+};
+
+export const updateEstimateActivityResource = async (user, id, data) => {
+  const project = await checkPlanningAccess(user, id);
+  project.planning.resource.estimateActivityResource = data;
+  await project.save();
+  return project.planning.resource.estimateActivityResource;
+};

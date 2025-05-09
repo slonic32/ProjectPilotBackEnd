@@ -11,6 +11,7 @@ import { swaggerSpec } from "./helpers/swagger.js";
 import projectRouter from "./routes/projectRouter.js";
 import workRouter from "./routes/workRouter.js";
 import deliverableRouter from "./routes/deliverableRouter.js";
+import activityRouter from "./routes/activityRouter.js";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use(`${pathPrefix}/users`, userRouter);
 app.use(`${pathPrefix}/projects`, projectRouter);
 app.use(`${pathPrefix}/works`, workRouter);
 app.use(`${pathPrefix}/deliverables`, deliverableRouter);
+app.use(`${pathPrefix}/activities`, activityRouter);
 
 app.use((_, res, next) => {
   next(HttpError(404, "Route not found"));

@@ -65,6 +65,45 @@ router
     validateBody(planningSchemas.createWBS),
     errorHandling(controllers.updateCreateWBS)
   )
+  .patch(
+    "/:id/planning/schedule/planScheduleManagement",
+    authenticate,
+    validateBody(planningSchemas.planScheduleManagement),
+    errorHandling(controllers.updatePlanScheduleManagement)
+  )
+  .patch(
+    "/:id/planning/cost/planCostManagement",
+    authenticate,
+    validateBody(planningSchemas.planCostManagement),
+    errorHandling(controllers.updatePlanCostManagement)
+  )
+
+  .patch(
+    "/:id/planning/cost/estimateCost",
+    authenticate,
+    validateBody(planningSchemas.estimateCost),
+    errorHandling(controllers.updateEstimateCost)
+  )
+
+  .patch(
+    "/:id/planning/cost/determineBudget",
+    authenticate,
+    validateBody(planningSchemas.determineBudget),
+    errorHandling(controllers.updateDetermineBudget)
+  )
+  .patch(
+    "/:id/planning/resource/planResourceManagement",
+    authenticate,
+    validateBody(planningSchemas.planResourceManagement),
+    errorHandling(controllers.updatePlanResourceManagement)
+  )
+  .patch(
+    "/:id/planning/resource/estimateActivityResource",
+    authenticate,
+    validateBody(planningSchemas.estimateActivityResource),
+    errorHandling(controllers.updateEstimateActivityResource)
+  )
+
   .get(
     "/:id/initiation",
     authenticate,
@@ -492,6 +531,282 @@ export default router;
  *         description: Access denied
  *       404:
  *         description: Project not found
+ *
+ * /api/projects/{id}/planning/schedule/planScheduleManagement:
+ *   patch:
+ *     summary: Update Schedule Management Plan
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               scheduleManagementPlan:
+ *                 type: object
+ *                 properties:
+ *                   changeOfSchedule:
+ *                     type: string
+ *                   levelOfDetail:
+ *                     type: string
+ *                   dependencies:
+ *                     type: string
+ *                   unitsOfMeasure:
+ *                     type: string
+ *                   requestsForChanges:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Schedule plan updated
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Project not found
+ *
+ * /api/projects/{id}/planning/cost/planCostManagement:
+ *   patch:
+ *     summary: Update Cost Management Plan
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               costManagementPlan:
+ *                 type: object
+ *                 properties:
+ *                   units:
+ *                     type: array
+ *                     items: { type: string }
+ *                   precision:
+ *                     type: array
+ *                     items: { type: string }
+ *                   ranges:
+ *                     type: array
+ *                     items: { type: string }
+ *                   rules:
+ *                     type: array
+ *                     items: { type: string }
+ *                   reportingFormatsFrequency:
+ *                     type: array
+ *                     items: { type: string }
+ *     responses:
+ *       200:
+ *         description: Cost management plan updated
+ *
+ * /api/projects/{id}/planning/cost/estimateCost:
+ *   patch:
+ *     summary: Update Activity Cost Estimates
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               costEstimates:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     activity:
+ *                       type: string
+ *                     labor:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name: { type: string }
+ *                           cost: { type: number }
+ *                     materials:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name: { type: string }
+ *                           cost: { type: number }
+ *                     equipment:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name: { type: string }
+ *                           cost: { type: number }
+ *                     facilities:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name: { type: string }
+ *                           cost: { type: number }
+ *                     subcontractor:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name: { type: string }
+ *                           cost: { type: number }
+ *                     travel:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name: { type: string }
+ *                           cost: { type: number }
+ *                     reserve:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name: { type: string }
+ *                           cost: { type: number }
+ *                     costOfActivity:
+ *                       type: number
+ *     responses:
+ *       200:
+ *         description: Cost estimates updated
+ *
+ * /api/projects/{id}/planning/cost/determineBudget:
+ *   patch:
+ *     summary: Submit Cost Baseline and Funding Requirements
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               costBaseline:
+ *                 type: number
+ *               projectFundingRequirements:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     period:
+ *                       type: string
+ *                     cost:
+ *                       type: number
+ *     responses:
+ *       200:
+ *         description: Budget data updated
+ *
+ * /api/projects/{id}/planning/resource/planResourceManagement:
+ *   patch:
+ *     summary: Update Resource Management Plan
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               resourceManagementPlan:
+ *                 type: object
+ *                 properties:
+ *                   identified:
+ *                     type: string
+ *                   obtained:
+ *                     type: string
+ *                   roles:
+ *                     type: string
+ *                   training:
+ *                     type: string
+ *                   ensured:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Resource management plan updated
+ *
+ * /api/projects/{id}/planning/resource/estimateActivityResource:
+ *   patch:
+ *     summary: Update Resource Requirements for Project Activities
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               resourceRequireMents:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     timePeriod:
+ *                       type: string
+ *                     resource:
+ *                       type: string
+ *                     expectedUse:
+ *                       type: number
+ *                     units:
+ *                       type: string
+ *               basisOfEstimates:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Resource estimates updated
  *
  * components:
  *   schemas:
