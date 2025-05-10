@@ -91,19 +91,19 @@ const projectSchema = new Schema(
         planScopeManagement: {
           scopeManagementPlan: {
             type: {
-              projectScopeStatement: { type: String, required: true },
-              WBS: { type: String, required: true },
-              scopeBaseline: { type: String, required: true },
-              projectDeliverables: { type: String, required: true },
+              projectScopeStatement: { type: String, default: "" },
+              WBS: { type: String, default: "" },
+              scopeBaseline: { type: String, default: "" },
+              projectDeliverables: { type: String, default: "" },
             },
             default: {},
           },
           requirementsManagementPlan: {
             type: {
-              requirementActivities: { type: String, required: true },
-              changesManagedApproved: { type: String, required: true },
-              requirementPrioritised: { type: String, required: true },
-              metricsUsed: { type: String, required: true },
+              requirementActivities: { type: String, default: "" },
+              changesManagedApproved: { type: String, default: "" },
+              requirementPrioritised: { type: String, default: "" },
+              metricsUsed: { type: String, default: "" },
             },
             default: {},
           },
@@ -112,8 +112,8 @@ const projectSchema = new Schema(
           requirements: {
             type: [
               {
-                requirement: { type: String, required: true },
-                documentation: { type: String, required: true },
+                requirement: { type: String, default: "" },
+                documentation: { type: String, default: "" },
               },
             ],
             default: [],
@@ -129,11 +129,11 @@ const projectSchema = new Schema(
             default: [],
           },
           acceptanceCriteria: {
-            type: [{ type: String, required: true }],
+            type: [{ type: String, default: "" }],
             default: [],
           },
           exclusions: {
-            type: [{ type: String, required: true }],
+            type: [{ type: String, default: "" }],
             default: [],
           },
         },
@@ -148,11 +148,11 @@ const projectSchema = new Schema(
         planScheduleManagement: {
           scheduleManagementPlan: {
             type: {
-              changeOfSchedule: { type: String, required: true },
-              levelOfDetail: { type: String, required: true },
-              dependencies: { type: String, required: true },
-              unitsOfMeasure: { type: String, required: true },
-              requestsForChanges: { type: String, required: true },
+              changeOfSchedule: { type: String, default: "" },
+              levelOfDetail: { type: String, default: "" },
+              dependencies: { type: String, default: "" },
+              unitsOfMeasure: { type: String, default: "" },
+              requestsForChanges: { type: String, default: "" },
             },
             default: {},
           },
@@ -183,7 +183,7 @@ const projectSchema = new Schema(
                 labor: {
                   type: [
                     {
-                      name: { type: String, required: true },
+                      name: { type: String, default: "" },
                       cost: { type: Number, default: 0 },
                     },
                   ],
@@ -192,7 +192,7 @@ const projectSchema = new Schema(
                 materials: {
                   type: [
                     {
-                      name: { type: String, required: true },
+                      name: { type: String, default: "" },
                       cost: { type: Number, default: 0 },
                     },
                   ],
@@ -201,7 +201,7 @@ const projectSchema = new Schema(
                 equipment: {
                   type: [
                     {
-                      name: { type: String, required: true },
+                      name: { type: String, default: "" },
                       cost: { type: Number, default: 0 },
                     },
                   ],
@@ -210,7 +210,7 @@ const projectSchema = new Schema(
                 facilities: {
                   type: [
                     {
-                      name: { type: String, required: true },
+                      name: { type: String, default: "" },
                       cost: { type: Number, default: 0 },
                     },
                   ],
@@ -219,7 +219,7 @@ const projectSchema = new Schema(
                 subcontractor: {
                   type: [
                     {
-                      name: { type: String, required: true },
+                      name: { type: String, default: "" },
                       cost: { type: Number, default: 0 },
                     },
                   ],
@@ -228,7 +228,7 @@ const projectSchema = new Schema(
                 travel: {
                   type: [
                     {
-                      name: { type: String, required: true },
+                      name: { type: String, default: "" },
                       cost: { type: Number, default: 0 },
                     },
                   ],
@@ -237,7 +237,7 @@ const projectSchema = new Schema(
                 reserve: {
                   type: [
                     {
-                      name: { type: String, required: true },
+                      name: { type: String, default: "" },
                       cost: { type: Number, default: 0 },
                     },
                   ],
@@ -260,7 +260,7 @@ const projectSchema = new Schema(
           projectFundingRequirements: {
             type: [
               {
-                period: { type: String, required: true },
+                period: { type: String, default: "" },
                 cost: { type: Number, default: 0 },
               },
             ],
